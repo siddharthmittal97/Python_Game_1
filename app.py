@@ -1,6 +1,6 @@
-# CREATED BY SIDDHARTH MITTAL
 from flask import Flask, render_template_string, request
 import random
+import os
 
 app = Flask(__name__)
 
@@ -74,7 +74,7 @@ template = """
 <body>
   <h1>Hey! Let's play Stone Paper Scissors 🎮</h1>
   <form method="post">
-    <button name="choice" value="Stone">⛰️Stone</button>
+    <button name="choice" value="Stone">⛰️ Stone</button>
     <button name="choice" value="Paper">📄 Paper</button>
     <button name="choice" value="Scissors">✂️ Scissors</button>
   </form>
@@ -98,8 +98,8 @@ def game():
 
         if user_choice == computer_choice:
             result = f"🤝 It's a tie! Both chose {user_choice}."
-        elif (user_choice == "Rock" and computer_choice == "Scissors") or \
-             (user_choice == "Paper" and computer_choice == "Rock") or \
+        elif (user_choice == "Stone" and computer_choice == "Scissors") or \
+             (user_choice == "Paper" and computer_choice == "Stone") or \
              (user_choice == "Scissors" and computer_choice == "Paper"):
             result = f"🎉 You win! You: {user_choice}, Computer: {computer_choice}"
         else:
@@ -108,4 +108,6 @@ def game():
     return render_template_string(template, result=result)
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    # Bind to 0.0.0.0 and use the PORT environment variable for deployment
+    port = int(os.environ.get("PORT", 5000))  # Default to port 5000 if PORT not set
+    app.run(debug=True, host="0.0.0.0", port=port)
